@@ -1,0 +1,715 @@
+/* Основные стили */
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0d0d0d;
+    background-image: url('universe_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: #ffffff;
+}
+
+#header {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #a100ff;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.menu a {
+    color: #a100ff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.menu a:hover {
+    color: #e600ff;
+    text-shadow: 0 0 8px #e600ff;
+}
+
+.profile-container {
+    display: flex;
+    max-width: 1400px;
+    min-height:60vh;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);
+}
+
+.profile-actions {
+    position: absolute;
+    top: 450px;
+    left: 130px;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    background: #222;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.profile-avatar {
+    position: static;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #a100ff;
+    box-shadow: 0 0 10px #a100ff;
+    margin-bottom: 10px;
+}
+
+
+.btn {
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary {
+    background-color: #a100ff;
+    color: white;
+    box-shadow: 0 0 10px #a100ff;
+}
+
+.btn-primary:hover {
+    background-color: #e600ff;
+    box-shadow: 0 0 15px #e600ff;
+}
+
+.btn-secondary {
+    background-color: #800080;
+    color: white;
+    box-shadow: 0 0 10px #800080;
+}
+
+.btn-secondary:hover {
+    background-color: #550055;
+    box-shadow: 0 0 15px #e600ff;
+}
+
+/* bio */
+.profile-info {
+    position: static;
+    padding-left: 60px;
+    flex: 1;
+}
+
+.profile-info p {
+    font-size: 24px;
+    line-height: 1.6;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.profile-info strong {
+    color: #a100ff;
+    font-weight: bold;
+    text-shadow: 0 0 10px #a100ff;
+}
+
+/* Раздел Портфолио */
+.portfolio-container {
+    max-width: 1400px;
+    min-height:70vh;
+    margin: 50px auto;
+    padding: 20px;
+    background: #222;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+    text-align: center;
+}
+
+.portfolio-container h3 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Сетка портфолио */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/* Карточка работы */
+.portfolio-item {
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(161, 0, 255, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Изображение */
+.portfolio-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 4px solid #a100ff;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item:hover .portfolio-image {
+    opacity: 0.85;
+}
+
+/* Форма загрузки */
+.portfolio-form {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(161, 0, 255, 0.3);
+}
+
+.portfolio-form input,
+.portfolio-form textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #a100ff;
+    background: #1a1a1a;
+    color: white;
+}
+
+.btn-upload {
+    padding: 12px 24px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-upload:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+/* Контейнер формы */
+.edit-profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+    text-align: center;
+}
+
+.edit-profile-container h1 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+.edit-profile-container p {
+    font-size: 16px;
+    color: #bbb;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка сохранения */
+.btn-save {
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-save:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+/* Контейнер формы */
+.login-form {
+    max-width: 350px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Описание и сообщения */
+.info-message, .error-message {
+    text-align: center;
+    font-size: 16px;
+    color: #bbb;
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-weight: bold;
+}
+
+/* Поля формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-login:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+a {
+    color: #a100ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #e600ff;
+    text-shadow: 0 0 8px #e600ff;
+}
+
+/* Контейнер формы */
+.register-form {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Описание */
+.info-message {
+    text-align: center;
+    font-size: 16px;
+    color: #bbb;
+}
+
+/* Поля формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-register:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+/* Контейнер приветствия */
+.welcome-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #1a1a1a;
+    border-radius: 12px;
+        text-align: center;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+/* Заголовок */
+.welcome-container h1 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+    margin-bottom: 15px;
+}
+
+/* Сообщение об успешной регистрации */
+.success-message {
+    font-size: 24px;
+    color: #d4d4d4;
+    margin-bottom: 20px;
+}
+
+/* Ссылка на вход */
+.login-link {
+    font-weight: bold;
+    color: #a100ff;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+}
+
+.login-link:hover {
+    color: #e600ff;
+    text-shadow: 0 0 8px #e600ff;
+}
+
+/* Общий контейнер */
+.dashboard-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(161, 0, 255, 0.3);
+}
+
+/* Заголовок */
+h1 {
+    font-size: 36px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(161, 0, 255, 0.8);
+    margin-bottom: 15px;
+}
+
+/* Описание */
+.dashboard-container p {
+    font-size: 18px;
+    color: #ccc;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Эффект при наведении */
+.dashboard-container:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Контейнер уведомлений */
+.messages {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 450px;
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Общий стиль уведомлений */
+.messages li {
+    position: relative;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slideIn 0.5s forwards, fadeOut 0.5s 4s forwards;
+}
+
+/* Цвета для разных типов уведомлений */
+.messages .success {
+    background: #28a745;
+}
+
+.messages .error {
+    background: #dc3545;
+}
+
+.messages .warning {
+    background: #ffc107;
+    color: #222;
+}
+
+.messages .info {
+    background: #17a2b8;
+}
+
+/* Анимация появления */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Анимация исчезновения */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Общие стили для страницы */
+.password-reset-complete {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-complete h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;;
+}
+
+/* Текст */
+.password-reset-complete p {
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Ссылка на вход */
+.password-reset-complete a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #a100ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+.password-reset-complete a:hover {
+    background: #357ABD;
+}
+
+/* Общие стили формы */
+.password-reset-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-form h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Поля формы */
+.password-reset-form .form-label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.password-reset-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Ошибки */
+.password-reset-form .form-error {
+    color: #d9534f;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* Кнопка отправки */
+.password-reset-form button {
+    width: 100%;
+    padding: 10px;
+    background: #a100ff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.password-reset-form button:hover {
+    background: #357ABD;
+}
+
+/* Контейнер сообщения */
+.password-reset-message {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-message h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Описание */
+.password-reset-message p {
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+

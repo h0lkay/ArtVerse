@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Вход в аккаунт{% endblock %}
+
+{% block content %}
+    <h1>Вход</h1>
+    {% if form.errors %}
+        <p class="error-message">
+            Неправильное имя пользователя или пароль. Попробуйте снова.
+        </p>
+    {% else %}
+        <p class="info-message">
+            Введите данные для входа. Если у вас нет аккаунта, <a href="{% url 'users:register' %}">зарегистрируйтесь здесь</a>.
+        </p>
+    {% endif %}
+
+    <div class="login-form">
+        <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}"/>
+            <button type="submit" class="btn btn-login">Войти</button>
+        </form>
+    </div>
+<p class="info-message">
+    <a href="{% url 'users:password_reset' %}">Забыли пароль?</a></p>
+{% endblock %}

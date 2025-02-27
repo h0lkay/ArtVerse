@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    {% if user_profile.avatar %}
+        <img src="{{ user_profile.avatar.url }}" alt="Аватар" class="profile-avatar">
+    {% else %}
+        <img src="/static/users/images/User-avatar.svg.png" alt="Аватар по умолчанию" class="profile-avatar">
+    {% endif %}
+    <div class="profile-info">
+        <p><strong>Ник:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>О себе:</strong> {{ user_profile.bio }}</p>
+        {% if user_profile.social_link %}
+        <p><strong>Ссылка на соцсети:</strong> <a href="{{ user_profile.social_link }}" target="_blank" class="profile-link">Перейти</a></p>
+    {% endif %}
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'users:edit' %}" class="btn btn-primary">Редактировать профиль</a>
+        <a href="{% url 'users:logout' %}" class="btn btn-secondary">Выйти</a>
+    </div>
+
+</div>
+<!-- Раздел Портфолио -->
+<div class="portfolio-container">
+    <h3>Портфолио</h3>
+
+    <!-- Форма для загрузки изображений -->
+    <form method="post" enctype="multipart/form-data" class="portfolio-form">
+        {% csrf_token %}
+        {{ form.image }}
+        <button type="submit" class="btn btn-upload">Добавить работу</button>
+    </form>
+
+    {% if portfolio_images %}
+        <div class="portfolio-grid">
+            {% for image in portfolio_images %}
+                <div class="portfolio-item">
+                    <img src="{{ image.image.url }}" alt="Работа пользователя" class="portfolio-image">
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>У пользователя пока нет работ в портфолио.</p>
+    {% endif %}
+</div>
+{% endblock %}
