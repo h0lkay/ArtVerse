@@ -2,12 +2,19 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    <link href="{% static 'users/css/styles.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
 </head>
 <body>
 <div id="header">
     <span class="logo">ArtVerse</span>
     {% if request.user.is_authenticated %}
+        <ul class="menu">
+            <li>
+            <a href="{% url 'users:dashboard' %}">Главное</a>
+            <a href="{% url 'users:add_artwork' %}">Добавить работу</a>
+            </li>
+        </ul>
+    {% else %}
         <ul class="menu">
             <li>
             <a href="{% url 'users:dashboard' %}">Главное</a>

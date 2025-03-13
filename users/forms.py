@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile, PortfolioImage
+from .models import UserProfile, PortfolioImage, ArtworkForSale
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -39,3 +39,42 @@ class PortfolioImageForm(forms.ModelForm):
     class Meta:
         model = PortfolioImage
         fields = ['image']
+
+
+class ArtworkForSaleForm(forms.ModelForm):
+    class Meta:
+        model = ArtworkForSale
+        fields = ['title', 'description', 'price', 'image', 'category']
+        labels = {
+            'title': 'Название',
+            'description': 'Описание',
+            'price': 'Цена (руб.)',
+            'image': 'Изображение',
+            'category': 'Категория',
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Описание'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Цена'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+
+class ArtworkFilterForm(forms.Form):
+    title = forms.CharField(label="Название", required=False)
+    min_price = forms.DecimalField(label="Мин. цена", required=False, min_value=0)
+    max_price = forms.DecimalField(label="Макс. цена", required=False, min_value=0)
+    is_sold = forms.ChoiceField(
+        label="Статус",
+        choices=[('', 'Все'), ('0', 'В продаже'), ('1', 'Продано')],
+        required=False
+    )
+    SORT_CHOICES = [
+        ('price_asc', 'Цена (по возрастанию)'),
+        ('price_desc', 'Цена (по убыванию)'),
+        ('title_asc', 'Название (А-Я)'),
+        ('title_desc', 'Название (Я-А)'),
+        ('date_asc', 'Дата (сначала старые)'),
+        ('date_desc', 'Дата (сначала новые)'),
+    ]

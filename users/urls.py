@@ -28,8 +28,10 @@ urlpatterns = [
     path('password-reset/complete/',
          PasswordResetCompleteView.as_view(template_name="users/password_reset_complete.html"),
          name='password_reset_complete'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('', views.dashboard, name='dashboard'),
+    path('category/<str:category>/', views.dashboard, name='category_filter'),
     path('register/', views.register, name='register'),
     path('edit/', views.edit, name='edit'),
     path('profile/', views.profile, name='profile'),
+    path('add-artwork/', views.add_artwork, name='add_artwork')
 ]

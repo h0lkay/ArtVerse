@@ -8,3 +8,5 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserProfile, ProfileAdmin)
+admin.site.register(ArtworkForSale)
+admin.site.register(PortfolioImage)

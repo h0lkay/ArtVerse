@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="form-art-container">
+    <h4>Добавить работу</h4>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Опубликовать</button>
+    </form>
+</div>
+{% endblock %}
+

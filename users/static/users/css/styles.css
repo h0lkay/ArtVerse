@@ -2,7 +2,7 @@
 body {
     font-family: "Arial", sans-serif;
     margin: 0;
-    padding: 0;
+    padding-top: 60px;
     background-color: #0d0d0d;
     background-image: url('universe_background.jpg');
     background-size: cover;
@@ -13,9 +13,16 @@ body {
 }
 
 #header {
+    position: fixed;
+    top: 0;
+    font-size: 24px;
     background: #1a1a1a;
     color: #fff;
+    left: 0;
+    width: 98%;
     padding: 15px 20px;
+    font-weight: bold;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,6 +48,7 @@ body {
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
+    padding-right: 20px;
 }
 
 .menu a:hover {
@@ -60,10 +68,10 @@ body {
 }
 
 .profile-actions {
-    position: absolute;
-    top: 450px;
-    left: 130px;
+    position: relative;
+    top: 350px;
     width: 300px;
+    right: 1062px;
     height: 100px;
     display: flex;
     gap: 20px;
@@ -443,12 +451,12 @@ h1 {
 
 /* Контейнер приветствия */
 .welcome-container {
-    max-width: 500px;
+    max-width: 1200px;
     margin: 50px auto;
     padding: 30px;
     background: #1a1a1a;
     border-radius: 12px;
-        text-align: center;
+    text-align: center;
     box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
 }
 
@@ -482,9 +490,9 @@ h1 {
 
 /* Общий контейнер */
 .dashboard-container {
-    max-width: 900px;
-    margin: 50px auto;
-    padding: 30px;
+    max-width: 1500px;
+    margin: 20px auto;
+    padding: 10px;
     background: #1a1a1a;
     border-radius: 12px;
     text-align: center;
@@ -501,10 +509,10 @@ h1 {
 
 /* Описание */
 .dashboard-container p {
-    font-size: 18px;
+    font-size: 24px;
     color: #ccc;
     line-height: 1.6;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -711,5 +719,321 @@ h1 {
     font-size: 14px;
     color: #ffffff;
     line-height: 1.6;
+}
+
+.categories-filter {
+    font-size: 37px;
+    color: white;
+    max-width: 1500px;
+    margin-left: 200px;
+}
+
+.categories-filter ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.categories-filter ul li a {
+    text-decoration: none;
+    color: #f700ff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    transform: translateY(10px);
+}
+
+.categories-filter ul li a:hover {
+    border-bottom: solid;
+}
+
+.categories-filter ul li a.active {
+    background-color: #211a1a;
+    color: #d000ff;
+    border-color: #d000ff;
+}
+
+/* Основные стили для формы */
+.form-art-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 34px;
+    color: #fff;
+    text-shadow: 0 16px 16px rgba(161, 0, 255, 0.8);
+    margin-bottom: 10px;
+}
+
+/* Стили для формы */
+.form-art-container form {
+    width: 100%;
+    max-width: 500px;
+    background: #1a1a1a;
+    padding: 1.5rem;
+    border-radius: 8px; /* Скругленные углы */
+}
+
+/* Стили для полей формы */
+.form-art-container form .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d000ff;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* Стили для кнопки */
+.form-art-container form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #6a1b9a; /* Фиолетовый цвет для кнопки */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.4rem;
+}
+
+.form-art-container form button:hover {
+    background-color: #7c4dff;
+}
+.form-art-container input,
+.form-art-container textarea,
+.form-art-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #d000ff;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #211a1a;
+    transition: border-color 0.3s ease;
+}
+
+.form-art-container input:focus,
+.form-art-container textarea:focus {
+    border-color: #6a1b9a; /* Фиолетовый цвет при фокусе */
+    outline: none;
+    box-shadow: 0 0 5px rgba(106, 27, 154, 0.5); /* Тень при фокусе */
+}
+
+/* Общий контейнер */
+.artworks-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    padding: 20px;
+    max-width: 1500px;
+    margin: auto;
+}
+
+/* Карточка работы */
+.artwork-card {
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 22px rgb(208, 0, 255);
+}
+
+.artwork-image-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.artwork-image-container img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    z-index: 2;
+}
+
+.image-blur img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    object-position: center;
+    z-index: 1;
+    filter: blur(20px);
+}
+
+/* Контент внутри карточки */
+.artwork-info {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.artwork-title {
+    font-size: 1.5em;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.artwork-description {
+    font-size: 1em;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.artwork-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* Кнопка */
+.artwork-card button {
+    display: block;
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    background: #d000ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 12px;
+}
+
+.artwork-card button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgb(255, 255, 255);
+    background: #d000ff;
+}
+
+/* Статус "Продано" */
+.sold {
+    background: #f44336;
+    color: white;
+    padding: 8px;
+    font-weight: bold;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Фильтрация товаров */
+.filter-container {
+    margin: 10px auto;
+    padding: 5px;
+    max-width: 1510px;
+    background: #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(208, 0, 255, 0.5);
+}
+
+.filter-container form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    justify-content: space-between;
+}
+
+.filter-container label {
+    color: white;
+    margin-right: 10px;
+    font-size: 22px;
+}
+
+.filter-container select,
+.filter-container input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #d000ff;
+    background: #333;
+    color: white;
+    font-size: 16px;
+}
+
+.filter-container button {
+    background: #d000ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+    font-size: 20px;
+}
+
+.filter-container button:hover {
+    background: #a000cc;
+}
+
+/* Сортировка товаров */
+.sort-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sort-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.sort-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1a1a1a;
+    min-width: 220px;
+    box-shadow: 0px 8px 16px rgb(208, 0, 255);
+    z-index: 3;
+    right: 0;
+}
+
+.sort-dropdown-content a {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #d000ff;
+    font-size: 18px;
+}
+
+.sort-dropdown-content button:hover {
+    background-color: #211a1a;
+}
+
+.sort-dropdown:hover .sort-dropdown-content {
+    display: block;
 }
 

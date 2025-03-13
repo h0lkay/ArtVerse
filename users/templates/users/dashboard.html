@@ -8,4 +8,60 @@
     <p>Добро пожаловать в ArtVerse - платформа для приобретения цифровых художественных работ,
         которая предлагает как готовые иллюстрации, так и на заказ по индивидуальным предпочтениям.</p>
 </div>
+
+<div class="categories-filter">
+    <ul>
+        {% for value, label in categories %}
+            <li>
+                <a href="?category={{ value }}"
+                   class="{% if selected_category == value or not selected_category and value == 'Все' %}active{% endif %}">
+                    {{ label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="filter-container">
+    <form method="get">
+        <input type="hidden" name="category" value="{{ selected_category }}">
+        <input type="hidden" name="sort_by" value="{{ selected_sort }}">
+        {{ form.as_p }}
+        <button type="submit">Применить</button>
+        <div class="sort-dropdown">
+            <button type="button" class="sort-button">
+                <img src="/static/users/images/sort.png" alt="Sort">
+            </button>
+            <div class="sort-dropdown-content">
+                {% for value, label in sort_choices %}
+                    <a href="?category={{ selected_category }}&sort_by={{ value }}">{{ label }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="artworks-container">
+    {% for artwork in artworks %}
+        <div class="artwork-card">
+            <div class="artwork-image-container">
+                <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+                <div class="image-blur">
+                    <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+                </div>
+            </div>
+            <div class="artwork-info">
+                <h3 class="artwork-title">{{ artwork.title }}</h3>
+                <p class="artwork-description">{{ artwork.description }}</p>
+                <p class="artwork-price">Цена: {{ artwork.price }} руб.</p>
+
+                {% if artwork.is_sold %}
+                    <div class="sold">Продано</div>
+                {% else %}
+                    <button>Купить</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}
