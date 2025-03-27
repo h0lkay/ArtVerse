@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ artwork.title }}{% endblock %}
+
+{% block content %}
+<div class="artwork-detail-container">
+    <!-- Блок с изображением и кнопками -->
+    <div class="artwork-detail-header">
+        <img class="artwork-image" src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <div class="right-panel">
+            <div class="artwork-actions">
+                {% if artwork.user == request.user %}
+                    <a href="{% url 'users:edit_artwork' artwork.id %}" class="edit-button">📝 Редактировать</a>
+                    <form method="POST" action="{% url 'users:delete_artwork' artwork.id %}" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button" onclick="return confirm('Удалить этот товар?');">🗑️ Удалить</button>
+                    </form>
+                {% else %}
+                    <!-- Панель действий для других пользователей -->
+                    {% if artwork.is_sold %}
+                        <button class="disabled-button" disabled>Продано</button>
+                    {% else %}
+                        <button class="buy-button">🛒 Купить</button>
+                    {% endif %}
+                    <button type="submit" class="favorite-button">❤️ В избранное</button>
+                {% endif %}
+            </div>
+            <!-- Описание работы -->
+            <div class="artwork-description">
+                <h1>{{ artwork.title }}</h1>
+                <p>{{ artwork.description }}</p>
+                <p class="artwork-price">Цена: {{ artwork.price }} руб.</p>
+            </div>
+            <div class="artwork-actions">
+                {% if artwork.user != request.user %}
+                    <!-- Действия для других пользователей -->
+                    <a href="{% url 'users:artist_profile' artwork.user.username %}" class="profile-button">
+                        👤 Профиль художника
+                    </a>
+                    <a href="{% url 'users:start_chat' artwork.id %}" class="message-button">
+                        ✉️ Написать продавцу
+                    </a>
+                {% else %}
+                    <!-- Информация для автора -->
+                    <p class="author-info">Это ваша работа!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Портфолио художника -->
+    <div class="artist-portfolio">
+        <h2>Другие работы {{ artwork.user.username }}</h2>
+        <div class="portfolio-container">
+            {% if artist_portfolio %}
+                <div class="portfolio-grid">
+                    {% for image in artist_portfolio %}
+                        <div class="portfolio-item">
+                            <img src="{{ image.image.url }}" alt="{{ image.title }}" class="portfolio-image">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>У этого художника пока нет других работ.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Блок комментариев -->
+    <div class="comments-section">
+        <h2>Комментарии</h2>
+    </div>
+</div>
+{% endblock %}

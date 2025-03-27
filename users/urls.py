@@ -33,5 +33,14 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('edit/', views.edit, name='edit'),
     path('profile/', views.profile, name='profile'),
-    path('add-artwork/', views.add_artwork, name='add_artwork')
+    path('profile/<str:username>/', views.profile, name='artist_profile'),
+    path('add-artwork/', views.add_artwork, name='add_artwork'),
+    path("rules/", views.rules_view, name="platform_rules"),
+    path("artwork/<int:artwork_id>/", views.artwork_detail, name="artwork_detail"),
+    path("artwork/<int:artwork_id>/edit/", views.edit_artwork, name="edit_artwork"),
+    path("artwork/<int:artwork_id>/delete/", views.delete_artwork, name="delete_artwork"),
+    path('start_chat/<int:artwork_id>/', views.start_chat, name='start_chat'),
+    path('chat/<int:chat_id>/', views.chat_detail, name='chat_detail'),
+    path('chat/<int:chat_id>/send_message/', views.send_message, name='send_message'),
+    path('chats/', views.chat_list, name='chat_list'),
 ]

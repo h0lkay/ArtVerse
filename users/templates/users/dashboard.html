@@ -43,25 +43,27 @@
 
 <div class="artworks-container">
     {% for artwork in artworks %}
-        <div class="artwork-card">
-            <div class="artwork-image-container">
-                <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
-                <div class="image-blur">
+        <a href="{% url 'users:artwork_detail' artwork.id %}" class="artwork-card-link">
+            <div class="artwork-card">
+                <div class="artwork-image-container">
                     <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+                    <div class="image-blur">
+                        <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+                    </div>
+                </div>
+                <div class="artwork-info">
+                    <h3 class="artwork-title">{{ artwork.title }}</h3>
+                    <p class="artwork-description">{{ artwork.description }}</p>
+                    <p class="artwork-price">Цена: {{ artwork.price }} руб.</p>
+
+                    {% if artwork.is_sold %}
+                        <div class="sold">Продано</div>
+                    {% else %}
+                        <button>Купить</button>
+                    {% endif %}
                 </div>
             </div>
-            <div class="artwork-info">
-                <h3 class="artwork-title">{{ artwork.title }}</h3>
-                <p class="artwork-description">{{ artwork.description }}</p>
-                <p class="artwork-price">Цена: {{ artwork.price }} руб.</p>
-
-                {% if artwork.is_sold %}
-                    <div class="sold">Продано</div>
-                {% else %}
-                    <button>Купить</button>
-                {% endif %}
-            </div>
-        </div>
+        </a>
     {% endfor %}
 </div>
 {% endblock %}

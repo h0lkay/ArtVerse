@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-list-container">
+    <h2>Мои чаты</h2>
+    {% if chats %}
+        <ul class="chat-list">
+            {% for chat in chats %}
+                <li class="chat-item">
+                    <a href="{% url 'users:chat_detail' chat.id %}" class="chat-link">
+                        <div class="chat-info">
+                            <p class="chat-title">Чат по заказу: {{ chat.order.title }}</p>
+                            <p class="chat-participants">
+                                {% if chat.customer == request.user %}
+                                    С художником: {{ chat.artist.username }}
+                                {% else %}
+                                    С заказчиком: {{ chat.customer.username }}
+                                {% endif %}
+                            </p>
+                            <p class="chat-date">Создан: {{ chat.created_at|date:"d M Y, H:i" }}</p>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>У вас пока нет активных чатов.</p>
+    {% endif %}
+</div>
+{% endblock %}

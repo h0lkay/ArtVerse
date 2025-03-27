@@ -3,6 +3,7 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    <script src="{% static 'users/js/scripts.js' %}"></script>
 </head>
 <body>
 <div id="header">
@@ -12,6 +13,7 @@
             <li>
             <a href="{% url 'users:dashboard' %}">Главное</a>
             <a href="{% url 'users:add_artwork' %}">Добавить работу</a>
+            <a href="{% url 'users:chat_list' %}">Мои чаты</a></li>
             </li>
         </ul>
     {% else %}

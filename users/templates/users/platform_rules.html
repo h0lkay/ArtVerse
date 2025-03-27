@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Правила платформы{% endblock %}
+
+{% block content %}
+<div class="rule-container">
+    <h1>Правила платформы</h1>
+    <p class="rule-date">Дата обновления: {{ rules.0.updated_at|date:"d.m.Y" }}</p>
+    <hr>
+    {% for rule in rules %}
+        <h2>{{ rule.title }}</h2>
+        <div class="rule-content">
+            <p>{{ rule.content|linebreaks }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

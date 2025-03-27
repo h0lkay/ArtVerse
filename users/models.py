@@ -43,3 +43,37 @@ class ArtworkForSale(models.Model):
     def __str__(self):
         return f'{self.user.username} - {self.title}'
 
+
+class PlatformRules(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    content = models.TextField(verbose_name="Текст правил")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+
+    class Meta:
+        verbose_name = "Правило платформы"
+        verbose_name_plural = "Правила платформы"
+
+    def __str__(self):
+        return self.title
+
+
+class Chat(models.Model):
+    """Модель для хранения чата между заказчиком и художником."""
+    order = models.ForeignKey(ArtworkForSale, on_delete=models.CASCADE, related_name='chats')
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_chats')
+    artist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='artist_chats')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Чат по заказу {self.order.title}"
+
+
+class Message(models.Model):
+    """Модель для хранения сообщений в чате."""
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Сообщение от {self.sender.username} в чате {self.chat.id}"

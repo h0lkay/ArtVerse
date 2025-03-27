@@ -3,13 +3,63 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="form-art-container">
-    <h4>Добавить работу</h4>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit">Опубликовать</button>
-    </form>
+<div class="add-container">
+    <div class="form-art-container">
+        <h4>Добавить работу</h4>
+        <p>
+            Перед публикацией работы, пожалуйста, ознакомьтесь с
+            <a href="{% url 'users:platform_rules' %}" target="_blank">правилами платформы</a>.
+        </p>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit">Опубликовать</button>
+        </form>
+    </div>
+    <!-- Карточка товара для предпросмотра -->
+    <div class="product-preview">
+        <div class="preview-image-container">
+            <img id="preview-image" src="#" alt="Предпросмотр изображения"/>
+        </div>
+        <div class="preview-info">
+            <h3 id="preview-title">Название товара</h3>
+            <p id="preview-description">Описание товара</p>
+            <p id="preview-price">Цена: 0 руб.</p>
+            <button>Купить</button>
+        </div>
+    </div>
 </div>
-{% endblock %}
+<script>
+    // Функция для обновления предпросмотра карточки товара
+    function updatePreview() {
+        // Обновление изображения
+        const imageInput = document.getElementById('id_image');
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('preview-image').setAttribute('src', e.target.result);
+                document.getElementById('preview-image').style.display = 'block';
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        }
 
+        // Обновление названия товара
+        const titleInput = document.getElementById('id_title');
+        document.getElementById('preview-title').innerText = titleInput.value || "Название товара";
+
+        // Обновление описания товара
+        const descriptionInput = document.getElementById('id_description');
+        document.getElementById('preview-description').innerText = descriptionInput.value || "Описание товара";
+
+        // Обновление цены товара
+        const priceInput = document.getElementById('id_price');
+        document.getElementById('preview-price').innerText = `Цена: ${priceInput.value || 0} руб.`;
+    }
+
+    // Назначение обработчиков событий на поля формы
+    document.getElementById('id_image').addEventListener('change', updatePreview);
+    document.getElementById('id_title').addEventListener('input', updatePreview);
+    document.getElementById('id_description').addEventListener('input', updatePreview);
+    document.getElementById('id_price').addEventListener('input', updatePreview);
+</script>
+{% endblock %}

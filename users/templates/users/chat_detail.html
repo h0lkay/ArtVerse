@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-container">
+    <h2>Чат по заказу: {{ chat.order.title }}</h2>
+    <div class="messages">
+        {% for message in chat_messages %}
+            <div class="message {% if message.sender == request.user %}message-sent{% else %}message-received{% endif %}">
+                <p class="message-text">{{ message.text }}</p>
+                <p class="message-meta">
+                    <span class="message-sender">{{ message.sender.username }}</span>
+                    <span class="message-time">{{ message.created_at|date:"H:i, d M Y" }}</span>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+    <form id="message-form" class="message-form">
+        {% csrf_token %}
+        <textarea name="text" placeholder="Введите сообщение..." required></textarea>
+        <button type="submit">Отправить</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('message-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+
+        fetch("{% url 'users:send_message' chat.id %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Очищаем поле ввода
+                form.querySelector('textarea').value = '';
+
+                // Опционально: добавляем новое сообщение в список без перезагрузки
+                const messagesContainer = document.querySelector('.messages');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message message-sent';
+                newMessage.innerHTML = `
+                    <p class="message-text">${formData.get('text')}</p>
+                    <p class="message-meta">
+                        <span class="message-sender">{{ request.user.username }}</span>
+                        <span class="message-time">Только что</span>
+                    </p>
+                `;
+                messagesContainer.appendChild(newMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+{% endblock %}
