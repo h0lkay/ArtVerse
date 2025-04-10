@@ -3,8 +3,9 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import UserProfile, PortfolioImage, ArtworkForSale, PlatformRules, Chat, Message
-from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm, PortfolioImageForm, \
+from .models import UserProfile, PortfolioImage, ArtworkForSale, PlatformRules, Chat, Message, FavoriteArtworks, \
+    FollowedArtist, Notification
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, PortfolioImageForm, \
     ArtworkForSaleForm, ArtworkFilterForm
 
 
@@ -189,11 +190,18 @@ def send_message(request, chat_id):
         text = request.POST.get('text', '').strip()
 
         if text:
-            Message.objects.create(
+            message = Message.objects.create(
                 chat=chat,
                 sender=request.user,
                 text=text,
             )
+
+            # Определяем получателя сообщения (того, кто не является отправителем)
+            recipient = chat.customer if request.user == chat.artist else chat.artist
+
+            # Отправляем уведомление только получателю
+            send_message_notification(recipient, message.text, request.user.username)
+
             return JsonResponse({'status': 'success'})
         return JsonResponse({'status': 'error', 'message': 'Сообщение не может быть пустым'}, status=400)
 
@@ -232,3 +240,122 @@ def delete_artwork(request, artwork_id):
     if request.method == "POST":
         artwork.delete()
         return redirect("users:dashboard")  # Перенаправление на страницу профиля после удаления
+
+
+@login_required
+def toggle_favorite_artwork(request, artwork_id):
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
+    try:
+        artwork = ArtworkForSale.objects.get(id=artwork_id)
+    except ArtworkForSale.DoesNotExist:
+        return JsonResponse({"error": "Artwork not found"}, status=404)
+
+    favorite, created = FavoriteArtworks.objects.get_or_create(user=request.user, artwork=artwork)
+
+    if not created:
+        favorite.delete()
+        return JsonResponse({"status": "removed"})  # Удалено из избранного
+    else:
+        send_favorite_notification(artwork, request.user)  # Отправка уведомления
+        return JsonResponse({"status": "added"})  # Добавлено в избранное
+
+
+@login_required
+def toggle_follow_artist(request, artist_id):
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({"error": "Invalid request"}, status=400)
+
+    artist = get_object_or_404(User, id=artist_id)
+
+    if artist == request.user:
+        return JsonResponse({"error": "Cannot follow yourself"}, status=400)
+
+    follow, created = FollowedArtist.objects.get_or_create(
+        follower=request.user,
+        artist=artist
+    )
+
+    if not created:
+        follow.delete()
+        return JsonResponse({"status": "unfollowed"})
+    else:
+        send_follow_notification(artist, request.user)
+        return JsonResponse({"status": "followed"})
+
+
+@login_required
+def favorite_artworks_list(request):
+    favorite_artworks = FavoriteArtworks.objects.filter(user=request.user).select_related("artwork")
+    return render(request, "users/favorite_artworks.html", {"favorite_artworks": favorite_artworks})
+
+
+@login_required
+def followed_artists(request):
+    followed_artists = FollowedArtist.objects.filter(follower=request.user).select_related("artist")
+    return render(request, "users/followed_artists.html", {"followed_artists": followed_artists})
+
+
+@login_required
+def notifications(request):
+    # Получаем все уведомления для текущего пользователя, сортируем по дате
+    notifications = request.user.notifications.all().order_by('-created_at')
+    return render(request, 'users/notifications.html', {'notifications': notifications})
+
+@login_required
+def mark_as_read(request, notification_id):
+    # Получаем уведомление по ID и помечаем его как прочитанное
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect('users:notifications')
+
+
+def send_message_notification(recipient, message_text, sender_username):
+    # Создаем уведомление о новом сообщении
+    Notification.objects.create(
+        user=recipient,
+        message=f'Новое сообщение от {sender_username}: {message_text}',
+        notification_type='message',
+    )
+
+
+def send_follow_notification(artist, follower):
+    # Уведомление о новом подписчике
+    Notification.objects.create(
+        user=artist,
+        message=f'{follower.username} подписался на вас!',
+        notification_type='follow',
+    )
+
+
+def send_favorite_notification(artwork, user):
+    # Уведомление о добавлении работы в избранное
+    Notification.objects.create(
+        user=artwork.user,
+        message=f'Ваша работа "{artwork.title}" была добавлена в избранное!',
+        notification_type='favorite',
+    )
+
+
+@login_required
+def check_unread_notifications(request):
+    # Получаем первые 5 непрочитанных уведомлений
+    unread_notifications = request.user.notifications.filter(is_read=False).order_by('-created_at')[:5]
+
+    # Формируем список уведомлений
+    notifications_data = [
+        {
+            'id': notification.id,
+            'message': notification.message,
+            'created_at': notification.created_at.isoformat(),
+            'type': notification.notification_type
+        }
+        for notification in unread_notifications
+    ]
+
+    return JsonResponse({
+        'unread_count': request.user.notifications.filter(is_read=False).count(),
+        'notifications': notifications_data
+    })

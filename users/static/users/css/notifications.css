@@ -1,0 +1,146 @@
+/* Основной контейнер уведомлений */
+.notification-groups {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #1a1a2e; /* Темный фон */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Заголовок страницы */
+h1 {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    color: #e0e0e0; /* Светлый цвет текста */
+    margin-bottom: 1.5rem;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 0 0 5px #8a2be2, 0 0 15px #8a2be2; /* Неоновое свечение */
+}
+
+/* Стилизуем блок, если нет уведомлений */
+.no-notifications {
+    text-align: center;
+    color: #999;
+    font-size: 1rem;
+}
+
+/* Стиль для кнопки типа уведомлений */
+.group-title {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    background-color: #2e2e46; /* Темно-синий фон */
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    text-shadow: 0 0 8px #8a2be2, 0 0 20px #8a2be2;
+}
+
+.group-title:hover {
+    background-color: #8a2be2; /* При наведении на кнопки — фиолетовый неон */
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Скрытый список уведомлений */
+.notifications-list {
+    padding-left: 0;
+    margin-top: 0.5rem;
+    list-style: none;
+    background-color: #2a2a3d; /* Темный фон для списка уведомлений */
+    border-radius: 8px;
+}
+
+/* Общий стиль для уведомлений */
+.notification {
+    background: #333444; /* Темный фон для уведомлений */
+    border-left: 5px solid transparent;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #e0e0e0; /* Светлый текст */
+}
+
+.notification:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); /* Яркое свечение при наведении */
+}
+
+/* Стили для разных типов уведомлений */
+.notification-follow {
+    border-left-color: #8a2be2; /* Фиолетовый для подписки */
+}
+
+.notification-message {
+    border-left-color: #4169e1; /* Синий для сообщений */
+}
+
+.notification-favorite {
+    border-left-color: #ff1493; /* Розовый для избранного */
+}
+
+/* Стиль для непрочитанных уведомлений */
+.notification.unread {
+    background-color: #4a4a64; /* Немного светлее для непрочитанных */
+}
+
+/* Стиль для прочитанных уведомлений */
+.notification.read {
+    opacity: 0.6;
+}
+
+/* Кнопка "Отметить как прочитанное" */
+.mark-read {
+    font-size: 0.9rem;
+    color: #8a2be2; /* Цвет текста кнопки */
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    background-color: rgba(138, 43, 226, 0.1); /* Легкий фиолетовый фон */
+    transition: all 0.3s ease;
+}
+
+.mark-read:hover {
+    color: #fff;
+    background-color: #8a2be2;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+/* Для текста уведомлений */
+.notification p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #e0e0e0;
+}
+
+/* Дата уведомления */
+.notification small {
+    font-size: 0.75rem;
+    color: #b0b0b0;
+}
+
+/* Стиль для кнопки скрытия/показа уведомлений */
+button.group-title {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    background-color: #2e2e46;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #e0e0e0;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}

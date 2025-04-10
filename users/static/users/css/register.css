@@ -1,0 +1,96 @@
+/* Контейнер формы */
+.register-form {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+/* Описание */
+.info-message {
+    text-align: center;
+    font-size: 16px;
+    color: #bbb;
+}
+
+/* Поля формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-register:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+/* Контейнер приветствия */
+.welcome-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+/* Заголовок */
+.welcome-container h1 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+    margin-bottom: 15px;
+}
+
+/* Сообщение об успешной регистрации */
+.success-message {
+    font-size: 24px;
+    color: #d4d4d4;
+    margin-bottom: 20px;
+}
+
+/* Ссылка на вход */
+.login-link {
+    font-weight: bold;
+    color: #a100ff;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+}
+
+.login-link:hover {
+    color: #e600ff;
+    text-shadow: 0 0 8px #e600ff;
+}

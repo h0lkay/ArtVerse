@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -77,3 +79,43 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Сообщение от {self.sender.username} в чате {self.chat.id}"
+
+
+class FavoriteArtworks(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorite_artworks")
+    artwork = models.ForeignKey(ArtworkForSale, on_delete=models.CASCADE, related_name="favorited_by")
+
+    class Meta:
+        unique_together = ("user", "artwork")
+
+    def __str__(self):
+        return f"{self.user.username} - {self.artwork.title}"
+
+
+class FollowedArtist(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    artist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    followed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('follower', 'artist')
+
+    def __str__(self):
+        return f"{self.follower.username} подписан на {self.artist.username}"
+
+
+class Notification(models.Model):
+    TYPE_CHOICES = [
+        ('message', 'Новое сообщение'),
+        ('follow', 'Новый подписчик'),
+        ('favorite', 'Работа добавлена в избранное'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    notification_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='message')
+    created_at = models.DateTimeField(default=timezone.now)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Notification for {self.user.username}: {self.message}'

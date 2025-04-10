@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="profile-container">
@@ -46,8 +51,7 @@
         <div class="portfolio-grid">
             {% for image in portfolio_images %}
                 <div class="portfolio-item">
-                    <img src="{{ image.image.url }}" alt="Работа пользователя" class="portfolio-image">
-                    <p class="portfolio-title">{{ image.title }}</p>
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}" class="portfolio-image">
                 </div>
             {% endfor %}
         </div>
@@ -55,4 +59,51 @@
         <p>У пользователя пока нет работ в портфолио.</p>
     {% endif %}
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.querySelector('.portfolio-grid');
+    const items = document.querySelectorAll('.portfolio-item');
+    const rowHeight = 10; // Должно соответствовать grid-auto-rows в CSS
+
+    // Ждем загрузки всех изображений
+    function waitForImages() {
+        const images = document.querySelectorAll('.portfolio-image');
+        let loaded = 0;
+
+        images.forEach(img => {
+            if(img.complete) {
+                loaded++;
+            } else {
+                img.addEventListener('load', function() {
+                    loaded++;
+                    if(loaded === images.length) calculateSpans();
+                });
+            }
+        });
+
+        if(loaded === images.length) calculateSpans();
+    }
+
+    // Рассчитываем span для каждого элемента
+    function calculateSpans() {
+        items.forEach(item => {
+            const height = item.offsetHeight;
+            const span = Math.ceil(height / rowHeight);
+            item.style.gridRowEnd = `span ${span}`;
+        });
+    }
+
+    // Инициализация
+    waitForImages();
+
+    // Реакция на ресайз окна
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            calculateSpans();
+        }, 250);
+    });
+});
+</script>
 {% endblock %}

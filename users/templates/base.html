@@ -3,6 +3,7 @@
 <head>
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
     <script src="{% static 'users/js/scripts.js' %}"></script>
 </head>
 <body>
@@ -14,6 +15,9 @@
             <a href="{% url 'users:dashboard' %}">Главное</a>
             <a href="{% url 'users:add_artwork' %}">Добавить работу</a>
             <a href="{% url 'users:chat_list' %}">Мои чаты</a></li>
+            <a href="{% url 'users:favorite_artworks' %}">Избранное</a></li>
+            <a href="{% url 'users:followed_artists' %}">Отслеживаемое</a></li>
+            <a href="{% url 'users:notifications' %}">Уведомления</a></li>
             </li>
         </ul>
     {% else %}
@@ -45,5 +49,6 @@
     {% block content %}
     {% endblock %}
 </div>
+
 </body>
 </html>

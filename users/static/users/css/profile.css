@@ -1,0 +1,243 @@
+.profile-container {
+    display: flex;
+    max-width: 1400px;
+    min-height:60vh;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(161, 0, 255, 0.5);
+}
+
+.profile-actions {
+    position: relative;
+    top: 350px;
+    width: 300px;
+    right: 1062px;
+    height: 100px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    background: #222;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.profile-avatar {
+    position: static;
+    width: 330px;
+    height: 330px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #a100ff;
+    box-shadow: 0 0 10px #a100ff;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: #a100ff;
+    color: white;
+    box-shadow: 0 0 10px #a100ff;
+}
+
+.btn-primary:hover {
+    background-color: #e600ff;
+    box-shadow: 0 0 15px #e600ff;
+}
+
+.btn-secondary {
+    background-color: #800080;
+    color: white;
+    box-shadow: 0 0 10px #800080;
+}
+
+.btn-secondary:hover {
+    background-color: #550055;
+    box-shadow: 0 0 15px #e600ff;
+}
+
+/* bio */
+.profile-info {
+    position: static;
+    padding-left: 60px;
+    flex: 1;
+}
+
+.profile-info p {
+    font-size: 24px;
+    line-height: 1.6;
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.profile-info strong {
+    color: #a100ff;
+    font-weight: bold;
+    text-shadow: 0 0 10px #a100ff;
+}
+
+/* Раздел Портфолио */
+.portfolio-container {
+    max-width: 1400px;
+    min-height:70vh;
+    margin: 50px auto;
+    padding: 20px;
+    background: #222;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+    text-align: center;
+}
+
+.portfolio-container h3 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-flow: dense;
+    gap: 10px;
+}
+
+/* Карточка работы */
+.portfolio-item {
+    background: #1a1a1a;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+/* Изображение */
+.portfolio-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    border-bottom: 4px solid #a100ff;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item > .portfolio-image {
+  grid-row: 1 / -1;
+  grid-column: 1;
+}
+
+.portfolio-item:hover .portfolio-image {
+    opacity: 0.85;
+}
+
+/* Форма загрузки */
+.portfolio-form {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(161, 0, 255, 0.3);
+}
+
+.portfolio-form input,
+.portfolio-form textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #a100ff;
+    background: #1a1a1a;
+    color: white;
+}
+
+.btn-upload {
+    padding: 12px 24px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-upload:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+.edit-profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+    text-align: center;
+}
+
+.edit-profile-container h1 {
+    font-size: 28px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+.edit-profile-container p {
+    font-size: 16px;
+    color: #bbb;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.edit-form input,
+.edit-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка сохранения */
+.btn-save {
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-save:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}

@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ artwork.title }}{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/artwork_detail.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="artwork-detail-container">
-    <!-- Блок с изображением и кнопками -->
     <div class="artwork-detail-header">
         <img class="artwork-image" src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
         <div class="right-panel">
@@ -16,39 +20,41 @@
                         <button type="submit" class="delete-button" onclick="return confirm('Удалить этот товар?');">🗑️ Удалить</button>
                     </form>
                 {% else %}
-                    <!-- Панель действий для других пользователей -->
                     {% if artwork.is_sold %}
                         <button class="disabled-button" disabled>Продано</button>
                     {% else %}
                         <button class="buy-button">🛒 Купить</button>
                     {% endif %}
-                    <button type="submit" class="favorite-button">❤️ В избранное</button>
+                    <button id="favorite-btn" class="favorite-button" onclick="toggleFavoriteArtwork({{ artwork.id }})">
+                        ❤️ В избранное
+                    </button>
                 {% endif %}
             </div>
-            <!-- Описание работы -->
+
             <div class="artwork-description">
                 <h1>{{ artwork.title }}</h1>
                 <p>{{ artwork.description }}</p>
                 <p class="artwork-price">Цена: {{ artwork.price }} руб.</p>
             </div>
+
             <div class="artwork-actions">
                 {% if artwork.user != request.user %}
-                    <!-- Действия для других пользователей -->
                     <a href="{% url 'users:artist_profile' artwork.user.username %}" class="profile-button">
                         👤 Профиль художника
                     </a>
                     <a href="{% url 'users:start_chat' artwork.id %}" class="message-button">
                         ✉️ Написать продавцу
                     </a>
+                    <button id="follow-btn" class="follow-button" onclick="toggleFavoriteArtist({{ artwork.user.id }})">
+                        ⭐ Отслеживать художника
+                    </button>
                 {% else %}
-                    <!-- Информация для автора -->
                     <p class="author-info">Это ваша работа!</p>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Портфолио художника -->
     <div class="artist-portfolio">
         <h2>Другие работы {{ artwork.user.username }}</h2>
         <div class="portfolio-container">
@@ -66,9 +72,73 @@
         </div>
     </div>
 
-    <!-- Блок комментариев -->
     <div class="comments-section">
         <h2>Комментарии</h2>
     </div>
 </div>
+
+<script>
+    function toggleFavoriteArtwork(artworkId) {
+    fetch(`/users/toggle_favorite_artwork/${artworkId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest",  // Для проверки AJAX-запроса
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Ошибка сети");
+        }
+        return response.json();
+    })
+    .then(data => {
+        const button = document.getElementById("favorite-btn");
+        if (data.status === "added") {
+            button.innerHTML = "❤️ В избранном";
+        } else if (data.status === "removed") {
+            button.innerHTML = "❤️ В избранное";
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка:", error);
+        alert("Произошла ошибка. Попробуйте ещё раз.");
+    });
+    }
+
+    function toggleFavoriteArtist(artistId) {
+    fetch(`/users/toggle_follow_artist/${artistId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const button = document.getElementById("follow-btn");
+        if (!button) return;
+
+        if (data.status === "followed") {
+            button.innerHTML = "✅ Отслеживается";
+            button.classList.add("active");
+        } else if (data.status === "unfollowed") {
+            button.innerHTML = "⭐ Отслеживать художника";
+            button.classList.remove("active");
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Произошла ошибка. Пожалуйста, попробуйте еще раз.");
+    });
+    }
+</script>
+
 {% endblock %}

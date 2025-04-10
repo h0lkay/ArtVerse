@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Правила платформы{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/rules.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="rule-container">

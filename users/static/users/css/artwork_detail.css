@@ -1,0 +1,287 @@
+/* Контейнер для деталей работы */
+.artwork-detail-container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 30px;
+    background: linear-gradient(to bottom, #1f1f1f, #111); /* Градиентный фон */
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Тень для объема */
+}
+
+/* Заголовок страницы */
+.artwork-detail-header {
+    display: flex;
+    align-items: stretch;
+    gap: 30px;
+    position: relative;
+}
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Изображение работы */
+.artwork-image {
+    max-width: 50%;
+    border-radius: 15px;
+    object-fit: contain;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Тень для изображения */
+    transition: transform 0.3s ease; /* Анимация при наведении */
+}
+
+.artwork-image:hover {
+    transform: scale(1.03);
+}
+
+/* Кнопки действий */
+.artwork-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.buy-button,
+.profile-button,
+.message-button {
+    background: linear-gradient(to right, #f700ff, #007bff); /* Градиентный фон */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease; /* Плавные переходы */
+    box-shadow: 0 4px 8px rgba(247, 0, 255, 0.4); /* Тень для кнопок */
+}
+
+.buy-button:hover,
+.profile-button:hover,
+.message-button:hover {
+    transform: translateY(-2px); /* Легкое "поднятие" кнопки */
+    box-shadow: 0 6px 12px rgba(247, 0, 255, 0.6); /* Усиленная тень */
+}
+
+.favorite-button {
+    background: rgba(247, 0, 255, 0.2);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(247, 0, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.favorite-button:hover {
+    background: rgba(247, 0, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(247, 0, 255, 0.3);
+}
+
+/* Стиль для активного состояния (в избранном) */
+.favorite-button.active {
+    background: rgba(247, 0, 255, 0.6);
+    border-color: rgba(247, 0, 255, 0.9);
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 15px rgba(247, 0, 255, 0.7);
+}
+
+.favorite-button.active:hover {
+    background: rgba(247, 0, 255, 0.7);
+    box-shadow: 0 0 20px rgba(247, 0, 255, 0.9);
+}
+
+
+.disabled-button {
+    background: #333;
+    color: #999;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: not-allowed;
+    border: 1px solid #444;
+}
+
+.edit-button {
+    background: linear-gradient(to right, #007bff, #f700ff);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.delete-button {
+    width: 100%;
+    background: linear-gradient(to right, #fc0707, #d000ff);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.edit-button:hover {
+    background: linear-gradient(to right, #0056b3, #003d80);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.6);
+    color: white;
+}
+
+.delete-button:hover {
+    background: linear-gradient(to right, #a71d2a, #8b1521);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.6);
+}
+
+/* Информация для автора */
+.author-info {
+    font-size: 36px;
+    color: #f700ff;
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.author-info:hover {
+    opacity: 10; /* Ярче при наведении */
+}
+
+/* Описание работы */
+.artwork-description {
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+}
+
+.artwork-description h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+    color: #f700ff;
+    text-transform: uppercase; /* Заглавные буквы */
+    letter-spacing: 2px; /* Расстояние между буквами */
+}
+
+.artwork-description p {
+    font-size: 36px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.artwork-price {
+    font-size: 52px;
+    font-weight: bold;
+    color: #f700ff;
+    text-shadow: 0 2px 5px rgba(247, 0, 255, 0.5); /* Светящийся текст */
+}
+
+/* Блок комментариев */
+.comments-section {
+    margin-top: 50px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.comments-section h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Портфолио художника */
+.artist-portfolio {
+    margin-top: 50px;
+}
+
+.artist-portfolio h2 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-flow: dense;
+    gap: 10px;
+}
+
+.portfolio-item {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover {
+    transform: scale(1.05);
+}
+
+.portfolio-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Стили для кнопки "Отслеживать художника" */
+.follow-button {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+    color: #FFD700;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
+    width: 100%;
+}
+
+.follow-button:hover {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.4), rgba(255, 165, 0, 0.4));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
+}
+
+/* Стиль для активного состояния (когда художник в отслеживаемых) */
+.follow-button.active {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.6), rgba(255, 165, 0, 0.6));
+    color: #fff;
+    border: 1px solid rgba(255, 215, 0, 0.8);
+}
+
+.follow-button.active:hover {
+    background: linear-gradient(to right, rgba(255, 215, 0, 0.8), rgba(255, 165, 0, 0.8));
+}

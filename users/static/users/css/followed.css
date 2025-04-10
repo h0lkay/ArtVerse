@@ -1,0 +1,139 @@
+h1 {
+    font-size: 2.5rem;
+    margin: 10px;
+    padding: 10px;
+    color: #ffffff;
+    text-shadow: 0 0 10px #f700ff;
+}
+
+p {
+    margin: 10px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+/* Карточка художника */
+.artist-card {
+    display: flex;
+    flex-wrap: wrap;
+    background: rgba(13, 13, 43, 0.7);
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    padding: 1.5rem;
+    position: relative;
+    gap: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 20px;
+}
+
+.artist-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(138, 43, 226, 0.6);
+}
+
+/* Левая колонка: инфо об авторе */
+.artist-left {
+    flex: 1 1 250px;
+    max-width: 300px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.artist-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #8a2be2;
+    margin-bottom: 1rem;
+}
+
+.artist-info h2 {
+    font-size: 2.2rem;
+    margin: 0.5rem 0;
+    color: #8a2be2;
+}
+
+.artist-bio {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin: 1rem 0;
+    line-height: 1.4;
+}
+
+.portfolio-count {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.unfollow-button {
+    width: 100%;
+    background-color: #8a2be2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.unfollow-button:hover {
+    background-color: #6a1be1;
+}
+
+.artist-right {
+    flex: 2 1 500px;
+}
+
+.artworks-for-sale {
+    margin-top: 0;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.artworks-for-sale h3 {
+    font-size: 1.4rem;
+    color: #8a2be2;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    text-align: left;
+}
+
+.artworks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1rem;
+}
+
+.artwork-card {
+    background-color: rgba(38, 38, 50, 0.85);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: auto;
+    height: auto;
+}
+
+.artwork-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(138, 43, 226, 0.7);
+}
+
+.artwork-card img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.artwork-card p {
+    font-size: 1.5rem;
+    color: #fff;
+}

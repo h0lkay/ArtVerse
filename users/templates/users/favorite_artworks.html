@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Избранные работы{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/favorite.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Избранные работы</h1>
+
+{% if favorite_artworks %}
+    <div class="artworks-container">
+        {% for fav in favorite_artworks %}
+            <div class="artwork-card">
+                <div class="artwork-image-container">
+                    <a href="{% url 'users:artwork_detail' fav.artwork.id %}">
+                        <img src="{{ fav.artwork.image.url }}" alt="{{ fav.artwork.title }}">
+                    </a>
+                    <div class="image-blur">
+                        <img src="{{ fav.artwork.image.url }}" alt="{{ fav.artwork.title }}">
+                    </div>
+                    <div class="favorite-heart" onclick="toggleFavoriteArtwork({{ fav.artwork.id }}, this)">
+                        ❤️
+                    </div>
+                </div>
+                <div class="artwork-info">
+                    <h3>{{ fav.artwork.title }}</h3>
+                    <p>{{ fav.artwork.price }} руб.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Вы еще не добавили работы в избранное.</p>
+{% endif %}
+
+<script>
+async function toggleFavoriteArtwork(artworkId, heartElement) {
+    try {
+        const response = await fetch(`/users/toggle_favorite_artwork/${artworkId}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Ошибка сервера");
+        }
+
+        const data = await response.json();
+
+        if (data.status === "removed") {
+            // Удаляем карточку из DOM
+            heartElement.closest(".artwork-card").remove();
+        }
+    } catch (error) {
+        console.error("Ошибка:", error);
+        alert("Не удалось удалить работу из избранного. Попробуйте ещё раз.");
+    }
+}
+</script>
+{% endblock %}

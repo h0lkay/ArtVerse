@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Отслеживаемые художники{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/followed.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Отслеживаемые художники</h1>
+
+{% if followed_artists %}
+    <div class="followed-artists-list">
+    {% for follow in followed_artists %}
+        <div class="artist-card">
+            <!-- Левая колонка -->
+            <div class="artist-left">
+                <!-- Аватар художника -->
+                <img src="{% if follow.artist.profile.avatar %}{{ follow.artist.profile.avatar.url }}{% else %}/static/users/images/User-avatar.svg.png{% endif %}"
+                     class="artist-avatar"
+                     alt="{{ follow.artist.username }}">
+
+                <div class="artist-info">
+                    <!-- Имя художника -->
+                    <h2>
+                        <a href="{% url 'users:artist_profile' follow.artist.username %}">
+                            {{ follow.artist.username }}
+                        </a>
+                    </h2>
+
+                    <!-- Биография художника -->
+                    <p class="artist-bio">
+                        {% if follow.artist.profile.bio %}
+                            {{ follow.artist.profile.bio }}
+                        {% else %}
+                            Художник пока не добавил информацию о себе.
+                        {% endif %}
+                    </p>
+
+                    <!-- Количество работ в портфолио -->
+                    <p class="portfolio-count">
+                        Работ в портфолио: {{ follow.artist.portfolio.count }}
+                    </p>
+
+                    <!-- Кнопка отписки -->
+                    <form class="unfollow-form"
+                          data-artist-id="{{ follow.artist.id }}"
+                          onsubmit="return submitUnfollowForm(this)">
+                        {% csrf_token %}
+                        <button type="submit" class="unfollow-button">❌ Отписаться</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Правая колонка -->
+            <div class="artist-right">
+                {% with follow.artist.artworks_for_sale.all as artworks %}
+                    {% if artworks %}
+                        <div class="artworks-for-sale">
+                            <h3>Работы на продажу:</h3>
+                            <div class="artworks-grid">
+                                {% for art in artworks %}
+                                    {% if not art.is_sold %}
+                                        <div class="artwork-card">
+                                            <a href="{% url 'users:artwork_detail' art.id %}" class="artwork-link">
+                                                <img src="{{ art.image.url }}" alt="{{ art.title }}">
+                                                <p>{{ art.title }}</p>
+                                                <p>{{ art.price }} руб.</p>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% else %}
+    <p>Вы пока не отслеживаете художников.</p>
+{% endif %}
+<script>
+function submitUnfollowForm(form) {
+    const artistId = form.dataset.artistId;
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`/users/toggle_follow_artist/${artistId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken,
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "unfollowed") {
+            form.closest('.artist-card').remove();
+        }
+    })
+    .catch(error => console.error(error));
+
+    return false; // Предотвращаем отправку формы
+}
+</script>
+{% endblock %}

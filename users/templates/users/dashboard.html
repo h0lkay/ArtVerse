@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
@@ -66,4 +71,164 @@
         </a>
     {% endfor %}
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/users/check_unread_notifications/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.notifications && data.notifications.length > 0) {
+                const notificationsToShow = data.notifications.slice(0, 5);
+                showNotifications(notificationsToShow);
+            }
+        });
+});
+
+function showNotifications(notifications) {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.bottom = '20px';
+    container.style.right = '20px';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column-reverse';
+    container.style.gap = '15px';
+    container.style.zIndex = '10000';
+    document.body.appendChild(container);
+
+    notifications.forEach((notification, index) => {
+        const notificationBox = createNotificationBox(notification.message, notification.type, index);
+        container.appendChild(notificationBox);
+
+        setTimeout(() => {
+            fetch(`/users/notifications/mark_as_read/${notification.id}/`);
+        }, 100);
+    });
+
+    setTimeout(() => {
+        fadeOutNotifications(container);
+    }, 5000);
+}
+
+function createNotificationBox(message, type, index) {
+    const notificationBox = document.createElement('div');
+    notificationBox.innerText = message;
+    notificationBox.style.padding = '15px 20px 15px 60px';
+    notificationBox.style.borderRadius = '8px';
+    notificationBox.style.maxWidth = '320px';
+    notificationBox.style.wordWrap = 'break-word';
+    notificationBox.style.opacity = '0';
+    notificationBox.style.transform = 'translateX(30px)';
+    notificationBox.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    notificationBox.style.fontFamily = "'Segoe UI', sans-serif";
+    notificationBox.style.fontWeight = '500';
+    notificationBox.style.position = 'relative';
+    notificationBox.style.overflow = 'hidden';
+    notificationBox.style.backdropFilter = 'blur(5px)';
+
+    // Создаем космический узор
+    const cosmicPattern = document.createElement('div');
+    cosmicPattern.style.position = 'absolute';
+    cosmicPattern.style.top = '0';
+    cosmicPattern.style.left = '0';
+    cosmicPattern.style.width = '100%';
+    cosmicPattern.style.height = '100%';
+    cosmicPattern.style.background = `
+        radial-gradient(circle at 20% 30%,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 20%),
+        radial-gradient(circle at 80% 70%,
+        rgba(255, 255, 255, 0.1) 0%,
+        transparent 20%)
+    `;
+    cosmicPattern.style.pointerEvents = 'none';
+    notificationBox.appendChild(cosmicPattern);
+
+    // Стили для разных типов уведомлений
+    const typeStyles = {
+        'follow': {
+            background: 'linear-gradient(135deg, rgba(70, 10, 90, 0.85) 0%, rgba(120, 30, 150, 0.85) 100%)',
+            border: '1px solid #ba55d3',
+            boxShadow: '0 0 20px rgba(186, 85, 211, 0.6)',
+            color: '#f0d5ff',
+            icon: '👥',
+            iconColor: 'linear-gradient(135deg, #ba55d3, #9370db)'
+        },
+        'message': {
+            background: 'linear-gradient(135deg, rgba(30, 30, 90, 0.85) 0%, rgba(50, 50, 150, 0.85) 100%)',
+            border: '1px solid #4169e1',
+            boxShadow: '0 0 20px rgba(65, 105, 225, 0.6)',
+            color: '#d5e5ff',
+            icon: '✉️',
+            iconColor: 'linear-gradient(135deg, #4169e1, #1e90ff)'
+        },
+        'favorite': {
+            background: 'linear-gradient(135deg, rgba(90, 10, 50, 0.85) 0%, rgba(150, 30, 80, 0.85) 100%)',
+            border: '1px solid #ff1493',
+            boxShadow: '0 0 20px rgba(255, 20, 147, 0.6)',
+            color: '#ffd5eb',
+            icon: '❤️',
+            iconColor: 'linear-gradient(135deg, #ff1493, #ff69b4)'
+        }
+    };
+
+    // Применяем стиль по типу уведомления
+    const style = typeStyles[type] || {
+        background: 'linear-gradient(135deg, rgba(40, 10, 60, 0.85) 0%, rgba(80, 20, 100, 0.85) 100%)',
+        border: '1px solid #9370db',
+        boxShadow: '0 0 20px rgba(147, 112, 219, 0.6)',
+        color: '#e6d5ff',
+        icon: '✨',
+        iconColor: 'linear-gradient(135deg, #9370db, #8a2be2)'
+    };
+
+    Object.assign(notificationBox.style, {
+        background: style.background,
+        border: style.border,
+        boxShadow: style.boxShadow,
+        color: style.color
+    });
+
+    // Создаем иконку с градиентным фоном
+    const iconContainer = document.createElement('div');
+    iconContainer.style.position = 'absolute';
+    iconContainer.style.left = '15px';
+    iconContainer.style.top = '50%';
+    iconContainer.style.transform = 'translateY(-50%)';
+    iconContainer.style.width = '32px';
+    iconContainer.style.height = '32px';
+    iconContainer.style.borderRadius = '50%';
+    iconContainer.style.display = 'flex';
+    iconContainer.style.alignItems = 'center';
+    iconContainer.style.justifyContent = 'center';
+    iconContainer.style.fontSize = '16px';
+    iconContainer.style.background = style.iconColor;
+
+    const icon = document.createElement('div');
+    icon.textContent = style.icon;
+    icon.style.fontSize = '18px';
+    iconContainer.appendChild(icon);
+    notificationBox.insertBefore(iconContainer, notificationBox.firstChild);
+
+    // Анимация появления
+    setTimeout(() => {
+        notificationBox.style.opacity = '1';
+        notificationBox.style.transform = 'translateX(0)';
+    }, index * 100);
+
+    return notificationBox;
+}
+
+function fadeOutNotifications(container) {
+    const notifications = container.querySelectorAll('div > div');
+    notifications.forEach((notification, index) => {
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%) scale(0.9)';
+        }, index * 50);
+    });
+
+    setTimeout(() => {
+        container.remove();
+    }, 800);
+}
+</script>
 {% endblock %}

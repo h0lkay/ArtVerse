@@ -1,0 +1,211 @@
+/* Контейнер формы */
+.login-form {
+    max-width: 350px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(161, 0, 255, 0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Описание и сообщения */
+.info-message, .error-message {
+    text-align: center;
+    font-size: 16px;
+    color: #bbb;
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-weight: bold;
+}
+
+/* Поля формы */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #a100ff;
+    background: #2a2a2a;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Кнопка */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #a100ff;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-login:hover {
+    background-color: #e600ff;
+    transform: scale(1.05);
+}
+
+a {
+    color: #a100ff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #e600ff;
+    text-shadow: 0 0 8px #e600ff;
+}
+
+/* Общие стили для страницы */
+.password-reset-complete {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-complete h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;;
+}
+
+/* Текст */
+.password-reset-complete p {
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Ссылка на вход */
+.password-reset-complete a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #a100ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+}
+
+.password-reset-complete a:hover {
+    background: #357ABD;
+}
+
+/* Общие стили формы */
+.password-reset-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-form h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Поля формы */
+.password-reset-form .form-label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.password-reset-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Ошибки */
+.password-reset-form .form-error {
+    color: #d9534f;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+/* Кнопка отправки */
+.password-reset-form button {
+    width: 100%;
+    padding: 10px;
+    background: #a100ff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.password-reset-form button:hover {
+    background: #357ABD;
+}
+
+/* Контейнер сообщения */
+.password-reset-message {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+    background: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовок */
+.password-reset-message h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #a100ff;
+    text-shadow: 0 0 8px #a100ff;
+}
+
+/* Описание */
+.password-reset-message p {
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 1.6;
+}

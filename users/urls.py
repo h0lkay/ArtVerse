@@ -43,4 +43,11 @@ urlpatterns = [
     path('chat/<int:chat_id>/', views.chat_detail, name='chat_detail'),
     path('chat/<int:chat_id>/send_message/', views.send_message, name='send_message'),
     path('chats/', views.chat_list, name='chat_list'),
+    path("toggle_favorite_artwork/<int:artwork_id>/", views.toggle_favorite_artwork, name="toggle_favorite_artwork"),
+    path("toggle_follow_artist/<int:artist_id>/", views.toggle_follow_artist, name="toggle_follow_artist"),
+    path("favorite_artworks/", views.favorite_artworks_list, name="favorite_artworks"),
+    path("followed_artists/", views.followed_artists, name="followed_artists"),
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/mark_as_read/<int:notification_id>/', views.mark_as_read, name='mark_as_read'),
+    path('check_unread_notifications/', views.check_unread_notifications, name='check_unread_notifications'),
 ]

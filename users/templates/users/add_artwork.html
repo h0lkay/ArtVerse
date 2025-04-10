@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% load crispy_forms_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/edit_artwork.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="add-container">

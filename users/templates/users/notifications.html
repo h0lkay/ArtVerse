@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Уведомления{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/notifications.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Ваши уведомления</h1>
+
+{% if notifications %}
+    <div class="notification-groups">
+        <!-- Выпадающие списки для каждого типа уведомлений -->
+        <div class="group">
+            <button class="group-title" onclick="toggleVisibility('follow-notifications')">Подписки</button>
+            <ul id="follow-notifications" class="notifications-list" style="display: none;">
+                {% for notification in notifications %}
+                    {% if notification.notification_type == 'follow' %}
+                        <li class="notification {% if notification.is_read %}read{% else %}unread{% endif %} notification-follow">
+                            <div class="notification-content">
+                                <p>{{ notification.message }}</p>
+                            </div>
+                            <div class="notification-footer">
+                                <small>Дата: {{ notification.created_at }}</small>
+                                {% if not notification.is_read %}
+                                    <a href="{% url 'users:mark_as_read' notification.id %}" class="mark-read">Отметить как прочитанное</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="group">
+            <button class="group-title" onclick="toggleVisibility('message-notifications')">Сообщения</button>
+            <ul id="message-notifications" class="notifications-list" style="display: none;">
+                {% for notification in notifications %}
+                    {% if notification.notification_type == 'message' %}
+                        <li class="notification {% if notification.is_read %}read{% else %}unread{% endif %} notification-message">
+                            <div class="notification-content">
+                                <p>{{ notification.message }}</p>
+                            </div>
+                            <div class="notification-footer">
+                                <small>Дата: {{ notification.created_at }}</small>
+                                {% if not notification.is_read %}
+                                    <a href="{% url 'users:mark_as_read' notification.id %}" class="mark-read">Отметить как прочитанное</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="group">
+            <button class="group-title" onclick="toggleVisibility('favorite-notifications')">Избранное</button>
+            <ul id="favorite-notifications" class="notifications-list" style="display: none;">
+                {% for notification in notifications %}
+                    {% if notification.notification_type == 'favorite' %}
+                        <li class="notification {% if notification.is_read %}read{% else %}unread{% endif %} notification-favorite">
+                            <div class="notification-content">
+                                <p>{{ notification.message }}</p>
+                            </div>
+                            <div class="notification-footer">
+                                <small>Дата: {{ notification.created_at }}</small>
+                                {% if not notification.is_read %}
+                                    <a href="{% url 'users:mark_as_read' notification.id %}" class="mark-read">Отметить как прочитанное</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <p class="no-notifications">Нет новых уведомлений.</p>
+{% endif %}
+<script>
+    function toggleVisibility(id) {
+        var list = document.getElementById(id);
+        if (list.style.display === "none" || list.style.display === "") {
+            list.style.display = "block";
+        } else {
+            list.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
