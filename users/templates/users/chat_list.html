@@ -25,6 +25,14 @@
                             <p class="chat-date">Создан: {{ chat.created_at|date:"d M Y, H:i" }}</p>
                         </div>
                     </a>
+
+                    <div class="chat-actions">
+                        {% if chat.customer == request.user %}
+                            <a href="{% url 'users:report_user' chat.artist.id %}" class="report-link">🚫 Пожаловаться на художника</a>
+                        {% elif chat.artist == request.user %}
+                            <a href="{% url 'users:report_user' chat.customer.id %}" class="report-link">🚫 Пожаловаться на заказчика</a>
+                        {% endif %}
+                    </div>
                 </li>
             {% endfor %}
         </ul>

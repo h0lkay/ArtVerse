@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Пожаловаться на {{ reported_user.username }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users/css/report.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="report-container">
+    <h2>Пожаловаться на {{ reported_user.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить жалобу</button>
+    </form>
+</div>
+{% endblock %}

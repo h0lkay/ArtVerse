@@ -1,0 +1,94 @@
+.report-container {
+    max-width: 800px;
+    margin: 80px auto;  /* Увеличен отступ сверху и снизу */
+    padding: 35px; /* Увеличен внутренний отступ */
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);  /* Увеличена тень */
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.report-container h2 {
+    color: #f700ff;
+    text-align: center;
+    font-size: 2.4em;  /* Увеличен размер шрифта */
+    text-transform: uppercase;
+    margin-bottom: 30px;  /* Увеличен отступ снизу */
+    letter-spacing: 1px;
+}
+
+.report-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;  /* Увеличен отступ между элементами формы */
+}
+
+.report-container label {
+    color: #ffffff;
+    font-size: 1.3em;  /* Увеличен размер шрифта */
+    margin-bottom: 12px;  /* Увеличен отступ снизу */
+}
+
+.report-container textarea,
+.report-container input[type="text"],
+.report-container select {
+    width: 100%;
+    padding: 16px;  /* Увеличен внутренний отступ */
+    border-radius: 8px;
+    border: none;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    font-size: 1.1em;  /* Увеличен размер шрифта */
+}
+
+.report-container textarea {
+    resize: vertical;
+    min-height: 160px;  /* Увеличена минимальная высота текстового поля */
+}
+
+.report-container input[type="radio"] {
+    margin-right: 12px;  /* Увеличен отступ справа */
+}
+
+.report-container .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;  /* Увеличен отступ между радио-кнопками */
+    padding-left: 12px;  /* Увеличен отступ слева */
+}
+
+.report-container button {
+    align-self: flex-end;
+    background: linear-gradient(to right, #f700ff, #007bff);
+    color: #ffffff;
+    padding: 16px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 20px;
+}
+
+.report-container button:hover {
+    background: linear-gradient(to right, #d000d8, #0056d2);
+}
+
+.report-container select {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #2a2a2a;
+    color: #ffffff;
+    font-size: 1.1em;
+    margin-bottom: 12px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.report-container select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}

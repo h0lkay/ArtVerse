@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile, PortfolioImage, ArtworkForSale
+from .models import UserProfile, PortfolioImage, ArtworkForSale, ArtworkComment
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -77,4 +77,27 @@ class ArtworkFilterForm(forms.Form):
         ('title_desc', 'Название (Я-А)'),
         ('date_asc', 'Дата (сначала старые)'),
         ('date_desc', 'Дата (сначала новые)'),
+        ('popular', 'По популярности'),
     ]
+
+
+class ArtworkCommentForm(forms.ModelForm):
+    class Meta:
+        model = ArtworkComment
+        fields = ['text', 'file']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 2, 'placeholder': 'Напишите комментарий...'}),
+        }
+
+
+class ReportForm(forms.Form):
+    REASON_CHOICES = [
+        ('adult', 'Неотмеченный контент для взрослых'),
+        ('illegal', 'Незаконный контент'),
+        ('fraud', 'Мошенничество / Украденное искусство'),
+        ('pricing', 'Неверная / вводящая в заблуждение цена'),
+        ('attribution', 'Неверное указание авторства при использовании базы'),
+        ('other', 'Другое'),
+    ]
+    reason = forms.ChoiceField(choices=REASON_CHOICES, widget=forms.Select, label="Причина")
+    details = forms.CharField(widget=forms.Textarea, required=False, label="Дополнительная информация")

@@ -137,3 +137,11 @@ p {
     font-size: 1.5rem;
     color: #fff;
 }
+
+.star {
+    font-size: 1.2rem;
+    color: gold;
+  }
+  .star.empty {
+    color: #ccc;
+  }

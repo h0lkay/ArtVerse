@@ -1,5 +1,5 @@
 from django.utils import timezone
-
+from django.db.models import Avg
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -9,6 +9,13 @@ class UserProfile(models.Model):
     bio = models.TextField(verbose_name="О себе", blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     social_link = models.URLField(blank=True, null=True)
+
+    @property
+    def average_rating(self):
+        from .models import ArtworkReview, ArtworkForSale
+        artworks = ArtworkForSale.objects.filter(user=self.user)
+        avg = ArtworkReview.objects.filter(artwork__in=artworks).aggregate(Avg('rating'))['rating__avg']
+        return round(avg or 0, 1)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
@@ -41,6 +48,18 @@ class ArtworkForSale(models.Model):
     category = models.CharField(max_length=40, choices=CATEGORY_CHOICES, default='featured', verbose_name="Категория")
     is_sold = models.BooleanField(default=False, verbose_name="Продано")
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def likes_count(self):
+        return self.votes.filter(value=1).count()
+
+    @property
+    def dislikes_count(self):
+        return self.votes.filter(value=-1).count()
+
+    @property
+    def popularity_score(self):
+        return self.likes_count - self.dislikes_count
 
     def __str__(self):
         return f'{self.user.username} - {self.title}'
@@ -119,3 +138,49 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'Notification for {self.user.username}: {self.message}'
+
+
+class ArtworkComment(models.Model):
+    artwork = models.ForeignKey(ArtworkForSale, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    file = models.FileField(upload_to="comments/", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name="liked_artwork_comments", blank=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+
+    def __str__(self):
+        return f"{self.user.username}: {self.text[:20]}"
+
+
+class CommentLike(models.Model):
+    comment = models.ForeignKey('ArtworkComment', on_delete=models.CASCADE, related_name="comment_likes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class ArtworkVote(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+    VOTE_CHOICES = (
+        (LIKE, 'Like'),
+        (DISLIKE, 'Dislike'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    artwork = models.ForeignKey(ArtworkForSale, on_delete=models.CASCADE, related_name='votes')
+    value = models.SmallIntegerField(choices=VOTE_CHOICES)
+
+    class Meta:
+        unique_together = ('user', 'artwork')  # Один голос на работу от пользователя
+
+
+class Report(models.Model):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_made')
+    reported = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reports_received')
+    reason = models.CharField(max_length=100)
+    details = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Жалоба от {self.reporter} на {self.reported} — {self.reason}"

@@ -50,4 +50,8 @@ urlpatterns = [
     path('notifications/', views.notifications, name='notifications'),
     path('notifications/mark_as_read/<int:notification_id>/', views.mark_as_read, name='mark_as_read'),
     path('check_unread_notifications/', views.check_unread_notifications, name='check_unread_notifications'),
+    path('artwork/<int:artwork_id>/preview/', views.watermarked_image_view, name='artwork_preview'),
+    path('vote_artwork/<int:artwork_id>/', views.vote_artwork, name='vote_artwork'),
+    path('report_user/<int:user_id>/', views.report_user, name='report_user'),
+    path('like_comment/<int:comment_id>/', views.like_comment, name='like_comment'),
 ]

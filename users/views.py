@@ -1,13 +1,21 @@
 from django.contrib import messages
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import UserProfile, PortfolioImage, ArtworkForSale, PlatformRules, Chat, Message, FavoriteArtworks, \
-    FollowedArtist, Notification
+    FollowedArtist, Notification, ArtworkVote, ArtworkComment, CommentLike
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, PortfolioImageForm, \
-    ArtworkForSaleForm, ArtworkFilterForm
-
+    ArtworkForSaleForm, ArtworkFilterForm, ArtworkCommentForm
+from django.http import HttpResponse, Http404
+from PIL import Image, ImageDraw, ImageFont
+from django.conf import settings
+import os
+from io import BytesIO
+import json
+from .forms import ReportForm
+from .models import Report
 
 @login_required
 def edit(request):
@@ -78,6 +86,8 @@ def dashboard(request):
             artworks = artworks.order_by('uploaded_at')
         elif sort_by == 'date_desc':
             artworks = artworks.order_by('-uploaded_at')
+        elif sort_by == 'popular':
+            artworks = sorted(artworks, key=lambda a: a.likes_count - a.dislikes_count, reverse=True)
         else:
             # Сортировка по умолчанию, если не выбрана другая
             artworks = artworks.order_by('-uploaded_at')
@@ -141,11 +151,31 @@ def rules_view(request):
 
 def artwork_detail(request, artwork_id):
     artwork = get_object_or_404(ArtworkForSale, id=artwork_id)
-    artist_portfolio = PortfolioImage.objects.filter(user=artwork.user).exclude(id=artwork.id)
-    return render(request, "users/artwork_detail.html", {
-        "artwork": artwork,
-        "artist_portfolio": artist_portfolio,
-    })
+
+    comments = artwork.comments.filter(parent__isnull=True)
+
+    if request.method == 'POST':
+        form = ArtworkCommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.artwork = artwork
+
+            parent_id = request.POST.get('parent_id')
+            if parent_id:
+                comment.parent = ArtworkComment.objects.get(id=parent_id)
+
+            comment.save()
+            return redirect('users:artwork_detail', artwork_id=artwork.id)
+    else:
+        form = ArtworkCommentForm()
+
+    context = {
+        'artwork': artwork,
+        'comments': comments,
+        'comment_form': form,
+    }
+    return render(request, 'users/artwork_detail.html', context)
 
 
 @login_required
@@ -293,8 +323,17 @@ def favorite_artworks_list(request):
 
 @login_required
 def followed_artists(request):
-    followed_artists = FollowedArtist.objects.filter(follower=request.user).select_related("artist")
-    return render(request, "users/followed_artists.html", {"followed_artists": followed_artists})
+    followed = FollowedArtist.objects.filter(follower=request.user).select_related('artist__profile')
+    followed_with_ratings = [
+        {
+            'artist': follow.artist,
+            'profile': follow.artist.profile,
+        }
+        for follow in followed
+    ]
+    return render(request, 'users/followed_artists.html', {
+        'followed_artists': followed_with_ratings
+    })
 
 
 @login_required
@@ -359,3 +398,114 @@ def check_unread_notifications(request):
         'unread_count': request.user.notifications.filter(is_read=False).count(),
         'notifications': notifications_data
     })
+
+
+def watermarked_image_view(request, artwork_id):
+    artwork = get_object_or_404(ArtworkForSale, id=artwork_id)
+
+    if not artwork.image:
+        raise Http404("Изображение не найдено")
+
+    image_path = os.path.join(settings.MEDIA_ROOT, artwork.image.name)
+    if not os.path.exists(image_path):
+        raise Http404("Файл изображения не существует")
+
+    with Image.open(image_path).convert("RGBA") as base:
+        watermark = Image.new("RGBA", base.size, (255, 255, 255, 0))
+        draw = ImageDraw.Draw(watermark)
+
+        text = "ArtVerse"
+        font_size = int(min(base.size) / 15)
+
+        try:
+            font_path = os.path.join(settings.BASE_DIR, "arial.ttf")
+            font = ImageFont.truetype(font_path, font_size)
+        except IOError:
+            font = ImageFont.load_default()
+
+        # Создание одного слоя текста, повернутого по диагонали
+        text_layer = Image.new("RGBA", base.size, (255, 255, 255, 0))
+        text_draw = ImageDraw.Draw(text_layer)
+
+        spacing_x = font_size * 4
+        spacing_y = font_size * 4
+
+        for y in range(0, base.size[1] + spacing_y, spacing_y):
+            for x in range(0, base.size[0] + spacing_x, spacing_x):
+                text_draw.text((x, y), text, font=font, fill=(255, 255, 255, 80))
+
+        # Поворот слоя с текстом
+        rotated_text = text_layer.rotate(-30, expand=1)
+
+        # Центрируем повёрнутый слой на изображении
+        watermark.paste(rotated_text, (
+            (base.size[0] - rotated_text.size[0]) // 2,
+            (base.size[1] - rotated_text.size[1]) // 2
+        ), rotated_text)
+
+        # Объединяем изображение с водяным знаком
+        combined = Image.alpha_composite(base, watermark)
+
+        output = BytesIO()
+        combined.convert("RGB").save(output, "JPEG", quality=90)
+        output.seek(0)
+
+        return HttpResponse(output.read(), content_type="image/jpeg")
+
+
+@require_POST
+@login_required
+def like_comment(request, comment_id):
+    try:
+        comment = ArtworkComment.objects.get(id=comment_id)
+        user = request.user
+
+        if user in comment.likes.all():
+            comment.likes.remove(user)
+            status = 'unliked'
+        else:
+            comment.likes.add(user)
+            status = 'liked'
+
+        return JsonResponse({
+            'status': status,
+            'total_likes': comment.likes.count()
+        })
+    except ArtworkComment.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Комментарий не найден'}, status=404)
+
+
+@require_POST
+def vote_artwork(request, artwork_id):
+    artwork = get_object_or_404(ArtworkForSale, id=artwork_id)
+    data = json.loads(request.body)
+    value = data.get("value")
+
+    vote, created = ArtworkVote.objects.update_or_create(
+        user=request.user,
+        artwork=artwork,
+        defaults={'value': value}
+    )
+
+    return JsonResponse({
+        "likes": artwork.likes_count,
+        "dislikes": artwork.dislikes_count,
+    })
+
+
+@login_required
+def report_user(request, user_id):
+    reported_user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            Report.objects.create(
+                reporter=request.user,
+                reported=reported_user,
+                reason=form.cleaned_data['reason'],
+                details=form.cleaned_data['details']
+            )
+            return redirect('users:dashboard')
+    else:
+        form = ReportForm()
+    return render(request, 'users/report_form.html', {'form': form, 'reported_user': reported_user})

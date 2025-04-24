@@ -6,11 +6,11 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'users/css/artwork_detail.css' %}">
 {% endblock %}
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% block content %}
 <div class="artwork-detail-container">
     <div class="artwork-detail-header">
-        <img class="artwork-image" src="{{ artwork.image.url }}" alt="{{ artwork.title }}">
+        <img class="artwork-image" src="{% url 'users:artwork_preview' artwork.id %}" alt="{{ artwork.title }}">
         <div class="right-panel">
             <div class="artwork-actions">
                 {% if artwork.user == request.user %}
@@ -48,13 +48,19 @@
                     <button id="follow-btn" class="follow-button" onclick="toggleFavoriteArtist({{ artwork.user.id }})">
                         ⭐ Отслеживать художника
                     </button>
+                    <a href="{% url 'users:report_user' artwork.user.id %}" class="report-button">🚫 Пожаловаться</a>
                 {% else %}
                     <p class="author-info">Это ваша работа!</p>
                 {% endif %}
             </div>
         </div>
     </div>
-
+    <div class="artwork-likes">
+        <button onclick="voteArtwork({{ artwork.id }}, 1)" class="like-button">👍</button>
+        <span id="likes-count" class="like-count">{{ artwork.likes_count }}</span>
+        <button onclick="voteArtwork({{ artwork.id }}, -1)" class="dislike-button">👎</button>
+        <span id="dislikes-count" class="like-count">{{ artwork.dislikes_count }}</span>
+    </div>
     <div class="artist-portfolio">
         <h2>Другие работы {{ artwork.user.username }}</h2>
         <div class="portfolio-container">
@@ -73,8 +79,116 @@
     </div>
 
     <div class="comments-section">
-        <h2>Комментарии</h2>
+    <h2>Комментарии</h2>
+
+    {% if request.user.is_authenticated %}
+    <h3>Оставить комментарий</h3>
+    <form method="post" enctype="multipart/form-data" class="comment-form-container">
+        {% csrf_token %}
+
+        <label for="id_text" class="sr-only">Комментарий</label>
+        <textarea name="text" id="id_text" class="comment-textarea">{{ comment_form.text.value|default:'' }}</textarea>
+
+        <!-- Иконка для выбора файла с видимой кнопкой -->
+        <div class="file-upload-container">
+            <label for="comment_file" class="file-upload-button">
+                <span>Прикрепить файл</span>
+            </label>
+            <input type="file" id="comment_file" name="file" class="file-input" />
+        </div>
+
+        <!-- Кнопка отправки -->
+        <button type="submit">Отправить</button>
+    </form>
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="comment">
+        <div class="comment-header">
+            {% if comment.user.profile.avatar %}
+                <img src="{{ comment.user.profile.avatar.url }}" alt="Аватар" class="avatar">
+            {% else %}
+                <img src="{% static 'users/images/User-avatar.svg.png' %}" alt="Аватар" class="avatar">
+            {% endif %}
+            <div class="comment-header-info">
+                <strong>{{ comment.user.username }}</strong>
+            </div>
+            <small class="comment-date">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+        </div>
+
+        {% load custom_filters %}
+
+        {% if comment.file %}
+            {% if comment.file.url|is_image_file %}
+                <img src="{{ comment.file.url }}" alt="preview" class="comment-preview-image">
+            {% else %}
+                <a href="{{ comment.file.url }}" target="_blank" class="comment-file-link">📎 Открыть вложение</a>
+            {% endif %}
+        {% endif %}
+
+        <p>{{ comment.text }}</p>
+
+        <div class="comment-actions">
+            <button id="like-btn-{{ comment.id }}" onclick="likeComment({{ comment.id }})" class="comment-action-btn">
+                ❤️ {{ comment.likes.count }}
+            </button>
+            <button onclick="toggleReplies({{ comment.id }})" class="comment-action-btn">
+                💬 Показать ответы ({{ comment.replies.count }})
+            </button>
+            <button onclick="toggleReplyForm({{ comment.id }})" class="comment-action-btn">Ответить</button>
+        </div>
+
+        <div id="reply-form-{{ comment.id }}" class="reply-form hidden">
+            <form method="post" enctype="multipart/form-data" class="comment-form-container">
+                {% csrf_token %}
+                <label for="reply-text-{{ comment.id }}" class="sr-only">Ответ</label>
+                <textarea name="text" id="reply-text-{{ comment.id }}" class="comment-textarea" placeholder="Напишите ответ...">{{ comment_form.text.value|default:'' }}</textarea>
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <div class="file-upload-container">
+                    <label for="reply_file_{{ comment.id }}" class="file-upload-button">
+                        <span>Прикрепить файл</span>
+                    </label>
+                    <input type="file" id="reply_file_{{ comment.id }}" name="file" class="file-input" />
+                </div>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+
+        <!-- Вложенные ответы -->
+
     </div>
+
+    <div id="replies-{{ comment.id }}" class="comment-replies {% if not comment.replies.count %}hidden{% endif %}">
+            {% for reply in comment.replies.all %}
+                <div class="reply">
+                    <div class="reply-header">
+                        {% if reply.user.profile.avatar %}
+                            <img src="{{ reply.user.profile.avatar.url }}" alt="Аватар" class="avatar reply-avatar">
+                        {% else %}
+                            <img src="{% static 'users/images/User-avatar.svg.png' %}" alt="Аватар" class="avatar reply-avatar">
+                        {% endif %}
+                        <div class="reply-header-info">
+                            <strong>{{ reply.user.username }}</strong>
+                            <small class="reply-date">{{ reply.created_at|date:"d.m.Y H:i" }}</small>
+                        </div>
+                    </div>
+                    {% if reply.file %}
+                        {% load custom_filters %}
+                        {% if reply.file.url|is_image_file %}
+                            <img src="{{ reply.file.url }}" alt="preview" class="comment-preview-image reply-preview">
+                        {% else %}
+                            <a href="{{ reply.file.url }}" target="_blank" class="comment-file-link">📎 Открыть вложение</a>
+                        {% endif %}
+                    {% endif %}
+                    <div class="reply-text">{{ reply.text }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p>Комментариев пока нет.</p>
+    {% endfor %}
+    </div>
+
 </div>
 
 <script>
@@ -139,6 +253,60 @@
         alert("Произошла ошибка. Пожалуйста, попробуйте еще раз.");
     });
     }
+    function voteArtwork(artworkId, voteValue) {
+    fetch(`/users/vote_artwork/${artworkId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ value: voteValue })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('likes-count').textContent = data.likes;
+        document.getElementById('dislikes-count').textContent = data.dislikes;
+    })
+    .catch(error => {
+        console.error("Ошибка при голосовании:", error);
+    });
+    }
+function toggleReplyForm(commentId) {
+    const form = document.getElementById(`reply-form-${commentId}`);
+    form.classList.toggle('hidden');
+    if (!form.classList.contains('hidden')) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function likeComment(commentId) {
+    fetch(`/users/like_comment/${commentId}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'liked' || data.status === 'unliked') {
+            document.getElementById(`like-btn-${commentId}`).innerText = `❤️ ${data.total_likes}`;
+        }
+    })
+    .catch(error => console.error("Ошибка при лайке:", error));
+}
+function toggleReplies(commentId) {
+    const replies = document.getElementById(`replies-${commentId}`);
+    const btn = document.querySelector(`button[onclick="toggleReplies(${commentId})"]`);
+
+    replies.classList.toggle('hidden');
+    if (replies.classList.contains('hidden')) {
+        btn.textContent = `💬 Показать ответы (${replies.children.length})`;
+    } else {
+        btn.textContent = '💬 Скрыть ответы';
+    }
+}
 </script>
 
 {% endblock %}
